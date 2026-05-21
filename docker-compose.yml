@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  miner:
+    build:
+      context: .
+      dockerfile: Dockerfile.miner
+    env_file: .env
+    ports:
+      - "${MINER_PORT:-8001}:8001"
+    restart: unless-stopped
+    volumes:
+      - ~/.bittensor:/root/.bittensor:ro
+
+  validator:
+    build:
+      context: .
+      dockerfile: Dockerfile.validator
+    env_file: .env
+    ports:
+      - "${VALIDATOR_PORT:-8000}:8000"
+    restart: unless-stopped
+    volumes:
+      - ~/.bittensor:/root/.bittensor:ro
+      - validator_db:/app/data
+
+volumes:
+  validator_db:
